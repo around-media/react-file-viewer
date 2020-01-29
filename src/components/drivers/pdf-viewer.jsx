@@ -3,6 +3,7 @@
 import React from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 import { PDFJS } from 'pdfjs-dist/build/pdf.combined';
+import classnames from 'classnames';
 import 'pdfjs-dist/web/compatibility';
 
 PDFJS.disableWorker = true;
@@ -29,7 +30,11 @@ export class PDFPage extends React.Component {
     // we want to render/re-render in two scenarias
     // user scrolls to the pdf
     // user zooms in
-    if (prevState.isVisible === this.state.isVisible && prevProps.zoom === this.props.zoom) return;
+    if (
+      prevState.isVisible === this.state.isVisible &&
+      prevProps.zoom === this.props.zoom
+    )
+      return;
     if (this.state.isVisible) this.fetchAndRenderPage();
   }
 
@@ -44,8 +49,10 @@ export class PDFPage extends React.Component {
 
   renderPage(page) {
     const { containerWidth, zoom } = this.props;
-    const calculatedScale = (containerWidth / page.getViewport(DEFAULT_SCALE).width);
-    const scale = calculatedScale > DEFAULT_SCALE ? DEFAULT_SCALE : calculatedScale;
+    const calculatedScale =
+      containerWidth / page.getViewport(DEFAULT_SCALE).width;
+    const scale =
+      calculatedScale > DEFAULT_SCALE ? DEFAULT_SCALE : calculatedScale;
     const viewport = page.getViewport(scale + zoom);
     const { width, height } = viewport;
 
@@ -55,20 +62,29 @@ export class PDFPage extends React.Component {
 
     page.render({
       canvasContext: context,
-      viewport,
+      viewport
     });
   }
 
   render() {
-    const { index } = this.props;
+    const { index, customStyles } = this.props;
     return (
-      <div key={`page-${index}`} className="pdf-canvas">
-        {this.props.disableVisibilityCheck ? <canvas ref={node => this.canvas = node} width="670" height="870" /> : (
-          <VisibilitySensor onChange={this.onChange} partialVisibility >
-            <canvas ref={node => this.canvas = node} width="670" height="870" />
+      <div
+        key={`page-${index}`}
+        className={'pdf-canvas'}
+        style={customStyles.page}
+      >
+        {this.props.disableVisibilityCheck ? (
+          <canvas ref={node => (this.canvas = node)} width="670" height="870" />
+        ) : (
+          <VisibilitySensor onChange={this.onChange} partialVisibility>
+            <canvas
+              ref={node => (this.canvas = node)}
+              width="670"
+              height="870"
+            />
           </VisibilitySensor>
-            )
-        }
+        )}
       </div>
     );
   }
@@ -80,8 +96,8 @@ export default class PDFDriver extends React.Component {
 
     this.state = {
       pdf: null,
-      zoom: 0,
-      percent: 0,
+      zoom: this.props.initialZoom || 0,
+      percent: 0
     };
 
     this.increaseZoom = this.increaseZoom.bind(this);
@@ -92,14 +108,19 @@ export default class PDFDriver extends React.Component {
   componentDidMount() {
     const { filePath } = this.props;
     const containerWidth = this.container.offsetWidth;
-    PDFJS.getDocument(filePath, null, null, this.progressCallback.bind(this)).then((pdf) => {
+    PDFJS.getDocument(
+      filePath,
+      null,
+      null,
+      this.progressCallback.bind(this)
+    ).then(pdf => {
       this.setState({ pdf, containerWidth });
     });
   }
 
   setZoom(zoom) {
     this.setState({
-      zoom,
+      zoom
     });
   }
 
@@ -126,34 +147,58 @@ export default class PDFDriver extends React.Component {
     if (!pdf) return null;
     const pages = Array.apply(null, { length: pdf.numPages });
     return pages.map((v, i) => (
-      (<PDFPage
+      <PDFPage
         index={i + 1}
         pdf={pdf}
         containerWidth={containerWidth}
         zoom={zoom * INCREASE_PERCENTAGE}
         disableVisibilityCheck={this.props.disableVisibilityCheck}
-      />)
+        {...this.props}
+      />
     ));
   }
 
   renderLoading() {
     if (this.state.pdf) return null;
-    return (<div className="pdf-loading">LOADING ({this.state.percent}%)</div>);
+    return <div className="pdf-loading">LOADING ({this.state.percent}%)</div>;
   }
 
   render() {
+    const { customStyles } = this.props;
     return (
-      <div className="pdf-viewer-container">
-        <div className="pdf-viewer" ref={node => this.container = node} >
-          <div className="pdf-controlls-container">
-            <div className="view-control" onClick={this.increaseZoom} >
-              <i className="zoom-in" />
+      <div
+        className={'pdf-viewer-container'}
+        style={customStyles.viewerContainer}
+      >
+        <div
+          className={'pdf-viewer'}
+          style={customStyles.viewer}
+          ref={node => (this.container = node)}
+        >
+          <div
+            className="pdf-controlls-container"
+            style={customStyles.controlsContainer}
+          >
+            <div
+              className="view-control"
+              style={customStyles.control}
+              onClick={this.increaseZoom}
+            >
+              {this.props.zoomInComp}
             </div>
-            <div className="view-control" onClick={this.resetZoom}>
-              <i className="zoom-reset" />
+            <div
+              className="view-control"
+              style={customStyles.control}
+              onClick={this.resetZoom}
+            >
+              {this.props.zoomResetComp}
             </div>
-            <div className="view-control" onClick={this.reduceZoom}>
-              <i className="zoom-out" />
+            <div
+              className="view-control"
+              style={customStyles.control}
+              onClick={this.reduceZoom}
+            >
+              {this.props.zoomOutComp}
             </div>
           </div>
           {this.renderLoading()}
@@ -166,4 +211,5 @@ export default class PDFDriver extends React.Component {
 
 PDFDriver.defaultProps = {
   disableVisibilityCheck: false,
+  customStyles: {}
 };

@@ -14,9 +14,9 @@ import mp4 from '../example_files/small.mp4';
 import xlsx from '../example_files/SimpleSpreadsheet.xlsx';
 import photo360 from '../example_files/360photo.jpg';
 import avi from '../example_files/drop.avi';
-import webm from '../example_files/small.webm'
-import mov from '../example_files/step.mov'
-import mp3 from '../example_files/sample.mp3'
+import webm from '../example_files/small.webm';
+import mov from '../example_files/step.mov';
+import mp3 from '../example_files/sample.mp3';
 import rtf from '../example_files/sample.rtf';
 import pdf from '../example_files/sample.pdf';
 
@@ -24,6 +24,26 @@ ReactDOM.render(
   <FileViewer
     fileType="pdf"
     filePath={pdf}
+    initialZoom={0}
+    zoomInComp={<button>ZOOM IN</button>}
+    zoomOutComp={<button>ZOOM OUT</button>}
+    zoomResetComp={<button>ZOOM RESET</button>}
+    customStyles={{
+      viewerContainer: {
+        width: '100%',
+        height: '100%'
+      },
+      viewer: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      page: {},
+      controlsContainer: {},
+      control: {}
+    }}
   />,
   window.document.getElementById('app')
 );
