@@ -3,7 +3,6 @@
 import React from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 import { PDFJS } from 'pdfjs-dist/build/pdf.combined';
-import classnames from 'classnames';
 import 'pdfjs-dist/web/compatibility';
 
 PDFJS.disableWorker = true;
@@ -130,7 +129,9 @@ export default class PDFDriver extends React.Component {
   }
 
   reduceZoom() {
-    if (this.state.zoom === 0) return;
+    if (this.state.zoom < 0) {
+      return;
+    }
     this.setZoom(this.state.zoom - 1);
   }
 
@@ -146,16 +147,24 @@ export default class PDFDriver extends React.Component {
     const { pdf, containerWidth, zoom } = this.state;
     if (!pdf) return null;
     const pages = Array.apply(null, { length: pdf.numPages });
-    return pages.map((v, i) => (
-      <PDFPage
-        index={i + 1}
-        pdf={pdf}
-        containerWidth={containerWidth}
-        zoom={zoom * INCREASE_PERCENTAGE}
-        disableVisibilityCheck={this.props.disableVisibilityCheck}
-        {...this.props}
-      />
-    ));
+
+    const pagesComp = [];
+    pagesComp.push(<div className="page-spacer"></div>);
+    pages.forEach((v, i) => {
+      pagesComp.push(
+        <PDFPage
+          index={i + 1}
+          pdf={pdf}
+          containerWidth={containerWidth}
+          zoom={zoom * INCREASE_PERCENTAGE}
+          disableVisibilityCheck={this.props.disableVisibilityCheck}
+          {...this.props}
+        />
+      );
+    });
+    pagesComp.push(<div className="page-spacer"></div>);
+
+    return pagesComp;
   }
 
   renderLoading() {
@@ -182,16 +191,16 @@ export default class PDFDriver extends React.Component {
             <div
               className="view-control"
               style={customStyles.control}
-              onClick={this.increaseZoom}
+              onClick={this.resetZoom}
             >
-              {this.props.zoomInComp}
+              {this.props.zoomResetComp}
             </div>
             <div
               className="view-control"
               style={customStyles.control}
-              onClick={this.resetZoom}
+              onClick={this.increaseZoom}
             >
-              {this.props.zoomResetComp}
+              {this.props.zoomInComp}
             </div>
             <div
               className="view-control"
