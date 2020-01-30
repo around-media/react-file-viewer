@@ -8,7 +8,7 @@ import 'pdfjs-dist/web/compatibility';
 
 PDFJS.disableWorker = true;
 const INCREASE_PERCENTAGE = 0.2;
-const DEFAULT_SCALE = 1.1;
+const DEFAULT_SCALE = 1.0;
 
 export class PDFPage extends React.Component {
   constructor(props) {
@@ -57,13 +57,6 @@ export class PDFPage extends React.Component {
     const viewport = page.getViewport(scale + zoom);
     const { width, height } = viewport;
 
-    console.log('containerWidth', containerWidth);
-    console.log('calculatedScale', calculatedScale);
-    console.log('scale', scale);
-    console.log('viewport', viewport);
-    console.log('width', width);
-    console.log('height', height);
-
     const context = this.canvas.getContext('2d');
     this.canvas.width = width;
     this.canvas.height = height;
@@ -75,21 +68,7 @@ export class PDFPage extends React.Component {
   }
 
   render() {
-    const { index, customStyles, preview } = this.props;
-    // if (preview) {
-    //   return (
-    //     <div
-    //       key={`page-${index}`}
-    //       className={classnames('pdf-canvas', customStyles.page)}
-    //     >
-    //       <canvas
-    //           ref={node => (this.canvas = node)}
-    //           width="670"
-    //           height="870"
-    //       />
-    //     </div>
-    //   );
-    // } else {
+    const { index, customStyles } = this.props;
     return (
       <div
         key={`page-${index}`}
@@ -108,7 +87,6 @@ export class PDFPage extends React.Component {
         )}
       </div>
     );
-    // }
   }
 }
 
