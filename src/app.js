@@ -28,22 +28,22 @@ ReactDOM.render(
     zoomInComp={<button>ZOOM IN</button>}
     zoomOutComp={<button>ZOOM OUT</button>}
     zoomResetComp={<button>ZOOM RESET</button>}
-    customStyles={{
-      viewerContainer: {
-        width: '100%',
-        height: '100%'
-      },
-      viewer: {
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      },
-      page: {},
-      controlsContainer: {},
-      control: {}
-    }}
+    // customStyles={{
+    //   viewerContainer: {
+    //     width: '100%',
+    //     height: '100%'
+    //   },
+    //   viewer: {
+    //     width: '100%',
+    //     height: '100%',
+    //     display: 'flex',
+    //     justifyContent: 'center',
+    //     alignItems: 'center'
+    //   },
+    //   page: {},
+    //   controlsContainer: {},
+    //   control: {}
+    // }}
   />,
   window.document.getElementById('app')
 );

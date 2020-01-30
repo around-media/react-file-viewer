@@ -168,8 +168,8 @@ export default class PDFDriver extends React.Component {
   }
 
   renderLoading() {
-    if (this.state.pdf) return null;
-    return <div className="pdf-loading">LOADING ({this.state.percent}%)</div>;
+    //if (this.state.pdf) return null;
+    return <div className="pdf-loading">Loading ({this.state.percent}%)</div>;
   }
 
   render() {
@@ -211,7 +211,7 @@ export default class PDFDriver extends React.Component {
             </div>
           </div>
           {this.renderLoading()}
-          {this.renderPages()}
+          {/* {this.renderPages()} */}
         </div>
       </div>
     );
