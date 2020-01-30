@@ -32,8 +32,7 @@ export class PDFPage extends React.Component {
     // user zooms in
     if (
       prevState.isVisible === this.state.isVisible &&
-      prevProps.zoom === this.props.zoom &&
-      prevProps.containerWidth === this.props.containerWidth
+      prevProps.zoom === this.props.zoom
     )
       return;
     if (this.state.isVisible) this.fetchAndRenderPage();
@@ -164,7 +163,7 @@ export default class PDFDriver extends React.Component {
     }
 
     const pagesComp = [];
-    pagesComp.push(<div className="page-spacer"></div>);
+    pagesComp.push(<div className="page-spacer" key="top-spacer"></div>);
     pages.forEach((v, i) => {
       pagesComp.push(
         <PDFPage
@@ -177,14 +176,18 @@ export default class PDFDriver extends React.Component {
         />
       );
     });
-    pagesComp.push(<div className="page-spacer"></div>);
+    pagesComp.push(<div className="page-spacer" key="bottom-spacer"></div>);
 
     return pagesComp;
   }
 
   renderLoading() {
     if (this.state.pdf) return null;
-    return <div className="pdf-loading">Loading ({this.state.percent}%)</div>;
+    return (
+      <div className="pdf-loading" key="loader">
+        Loading ({this.state.percent}%)
+      </div>
+    );
   }
 
   render() {
