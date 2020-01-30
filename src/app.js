@@ -30,7 +30,6 @@ ReactDOM.render(
       zoomInComp={<button>ZOOM IN</button>}
       zoomOutComp={<button>ZOOM OUT</button>}
       zoomResetComp={<button>ZOOM RESET</button>}
-      preview={true}
     />
   </div>,
   window.document.getElementById('app')

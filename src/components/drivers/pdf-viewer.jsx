@@ -33,9 +33,13 @@ export class PDFPage extends React.Component {
     if (
       prevState.isVisible === this.state.isVisible &&
       prevProps.zoom === this.props.zoom
-    )
+    ) {
       return;
-    if (this.state.isVisible) this.fetchAndRenderPage();
+    }
+
+    if (this.state.isVisible) {
+      this.fetchAndRenderPage();
+    }
   }
 
   onChange(isVisible) {
@@ -146,7 +150,6 @@ export default class PDFDriver extends React.Component {
   renderPages(preview) {
     const { pdf, containerWidth, zoom } = this.state;
     if (!pdf) return null;
-    const pages = Array.apply(null, { length: pdf.numPages });
 
     if (preview) {
       return (
@@ -160,25 +163,27 @@ export default class PDFDriver extends React.Component {
           {...this.props}
         />
       );
+    } else {
+      const pages = Array.apply(null, { length: pdf.numPages });
+      const pagesComp = [];
+      pagesComp.push(<div className="page-spacer" key="top-spacer"></div>);
+      pages.forEach((v, i) => {
+        pagesComp.push(
+          <PDFPage
+            key={i}
+            index={i + 1}
+            pdf={pdf}
+            containerWidth={containerWidth}
+            zoom={zoom * INCREASE_PERCENTAGE}
+            disableVisibilityCheck={this.props.disableVisibilityCheck}
+            {...this.props}
+          />
+        );
+      });
+      pagesComp.push(<div className="page-spacer" key="bottom-spacer"></div>);
+
+      return pagesComp;
     }
-
-    const pagesComp = [];
-    pagesComp.push(<div className="page-spacer" key="top-spacer"></div>);
-    pages.forEach((v, i) => {
-      pagesComp.push(
-        <PDFPage
-          index={i + 1}
-          pdf={pdf}
-          containerWidth={containerWidth}
-          zoom={zoom * INCREASE_PERCENTAGE}
-          disableVisibilityCheck={this.props.disableVisibilityCheck}
-          {...this.props}
-        />
-      );
-    });
-    pagesComp.push(<div className="page-spacer" key="bottom-spacer"></div>);
-
-    return pagesComp;
   }
 
   renderLoading() {
