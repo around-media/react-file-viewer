@@ -110,12 +110,13 @@ export default class PDFDriver extends React.Component {
 
   componentDidMount() {
     const { filePath } = this.props;
-    PDFJS.getDocument(
-      filePath,
-      null,
-      null,
-      this.progressCallback.bind(this)
-    ).then(pdf => {
+
+    const loadingTask = PDFJS.getDocument(filePath);
+    loadingTask.onProgress = progress => {
+      const percent = ((progress.loaded / progress.total) * 100).toFixed();
+      this.setState({ percent });
+    };
+    loadingTask.promise.then(pdf => {
       const containerWidth = this.container.offsetWidth;
       this.setState({ pdf, containerWidth });
     });
@@ -127,10 +128,7 @@ export default class PDFDriver extends React.Component {
     });
   }
 
-  progressCallback(progress) {
-    const percent = ((progress.loaded / progress.total) * 100).toFixed();
-    this.setState({ percent });
-  }
+  progressCallback(progress) {}
 
   reduceZoom() {
     if (this.state.zoom < 0) {
