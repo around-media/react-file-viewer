@@ -32,7 +32,8 @@ export class PDFPage extends React.Component {
     // user zooms in
     if (
       prevState.isVisible === this.state.isVisible &&
-      prevProps.zoom === this.props.zoom
+      prevProps.zoom === this.props.zoom &&
+      prevProps.containerWidth === this.props.containerWidth
     )
       return;
     if (this.state.isVisible) this.fetchAndRenderPage();
@@ -128,13 +129,13 @@ export default class PDFDriver extends React.Component {
 
   componentDidMount() {
     const { filePath } = this.props;
-    const containerWidth = this.container.offsetWidth;
     PDFJS.getDocument(
       filePath,
       null,
       null,
       this.progressCallback.bind(this)
     ).then(pdf => {
+      const containerWidth = this.container.offsetWidth;
       this.setState({ pdf, containerWidth });
     });
   }
