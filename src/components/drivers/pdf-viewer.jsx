@@ -3,6 +3,7 @@
 import React from 'react';
 import VisibilitySensor from 'react-visibility-sensor';
 import { PDFJS } from 'pdfjs-dist/build/pdf.combined';
+import classnames from 'classnames';
 import 'pdfjs-dist/web/compatibility';
 
 PDFJS.disableWorker = true;
@@ -70,8 +71,7 @@ export class PDFPage extends React.Component {
     return (
       <div
         key={`page-${index}`}
-        className={'pdf-canvas'}
-        style={customStyles.page}
+        className={classnames('pdf-canvas', customStyles.page)}
       >
         {this.props.disableVisibilityCheck ? (
           <canvas ref={node => (this.canvas = node)} width="670" height="870" />
@@ -176,35 +176,35 @@ export default class PDFDriver extends React.Component {
     const { customStyles } = this.props;
     return (
       <div
-        className={'pdf-viewer-container'}
-        style={customStyles.viewerContainer}
+        className={classnames(
+          'pdf-viewer-container',
+          customStyles.viewerContainer
+        )}
       >
         <div
-          className={'pdf-viewer'}
-          style={customStyles.viewer}
+          className={classnames('pdf-viewer', customStyles.viewer)}
           ref={node => (this.container = node)}
         >
           <div
-            className="pdf-controlls-container"
-            style={customStyles.controlsContainer}
+            className={classnames(
+              'pdf-controlls-container',
+              customStyles.controlsContainer
+            )}
           >
             <div
-              className="view-control"
-              style={customStyles.control}
+              className={classnames('view-control', customStyles.control)}
               onClick={this.resetZoom}
             >
               {this.props.zoomResetComp}
             </div>
             <div
-              className="view-control"
-              style={customStyles.control}
+              className={classnames('view-control', customStyles.control)}
               onClick={this.increaseZoom}
             >
               {this.props.zoomInComp}
             </div>
             <div
-              className="view-control"
-              style={customStyles.control}
+              className={classnames('view-control', customStyles.control)}
               onClick={this.reduceZoom}
             >
               {this.props.zoomOutComp}
