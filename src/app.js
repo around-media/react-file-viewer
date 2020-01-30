@@ -22,14 +22,16 @@ import pdf from '../example_files/sample.pdf';
 import pdf2 from '../example_files/sample2.pdf';
 
 ReactDOM.render(
-  <FileViewer
-    fileType="pdf"
-    filePath={pdf2}
-    initialZoom={0}
-    zoomInComp={<button>ZOOM IN</button>}
-    zoomOutComp={<button>ZOOM OUT</button>}
-    zoomResetComp={<button>ZOOM RESET</button>}
-    preview={true}
-  />,
+  <div style={{ width: '385px', height: '310px' }}>
+    <FileViewer
+      fileType="pdf"
+      filePath={pdf2}
+      initialZoom={0}
+      zoomInComp={<button>ZOOM IN</button>}
+      zoomOutComp={<button>ZOOM OUT</button>}
+      zoomResetComp={<button>ZOOM RESET</button>}
+      preview={true}
+    />
+  </div>,
   window.document.getElementById('app')
 );
