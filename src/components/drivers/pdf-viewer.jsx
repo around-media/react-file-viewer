@@ -143,10 +143,23 @@ export default class PDFDriver extends React.Component {
     this.setZoom(0);
   }
 
-  renderPages() {
+  renderPages(preview) {
     const { pdf, containerWidth, zoom } = this.state;
     if (!pdf) return null;
     const pages = Array.apply(null, { length: pdf.numPages });
+
+    if (preview) {
+      return (
+        <PDFPage
+          index={1}
+          pdf={pdf}
+          containerWidth={containerWidth}
+          zoom={zoom * INCREASE_PERCENTAGE}
+          disableVisibilityCheck={this.props.disableVisibilityCheck}
+          {...this.props}
+        />
+      );
+    }
 
     const pagesComp = [];
     pagesComp.push(<div className="page-spacer"></div>);
@@ -173,7 +186,7 @@ export default class PDFDriver extends React.Component {
   }
 
   render() {
-    const { customStyles } = this.props;
+    const { preview, customStyles } = this.props;
     return (
       <div
         className={classnames(
@@ -185,33 +198,35 @@ export default class PDFDriver extends React.Component {
           className={classnames('pdf-viewer', customStyles.viewer)}
           ref={node => (this.container = node)}
         >
-          <div
-            className={classnames(
-              'pdf-controlls-container',
-              customStyles.controlsContainer
-            )}
-          >
+          {!preview && (
             <div
-              className={classnames('view-control', customStyles.control)}
-              onClick={this.resetZoom}
+              className={classnames(
+                'pdf-controlls-container',
+                customStyles.controlsContainer
+              )}
             >
-              {this.props.zoomResetComp}
+              <div
+                className={classnames('view-control', customStyles.control)}
+                onClick={this.resetZoom}
+              >
+                {this.props.zoomResetComp}
+              </div>
+              <div
+                className={classnames('view-control', customStyles.control)}
+                onClick={this.increaseZoom}
+              >
+                {this.props.zoomInComp}
+              </div>
+              <div
+                className={classnames('view-control', customStyles.control)}
+                onClick={this.reduceZoom}
+              >
+                {this.props.zoomOutComp}
+              </div>
             </div>
-            <div
-              className={classnames('view-control', customStyles.control)}
-              onClick={this.increaseZoom}
-            >
-              {this.props.zoomInComp}
-            </div>
-            <div
-              className={classnames('view-control', customStyles.control)}
-              onClick={this.reduceZoom}
-            >
-              {this.props.zoomOutComp}
-            </div>
-          </div>
+          )}
           {this.renderLoading()}
-          {this.renderPages()}
+          {this.renderPages(preview)}
         </div>
       </div>
     );

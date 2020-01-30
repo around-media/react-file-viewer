@@ -19,31 +19,17 @@ import mov from '../example_files/step.mov';
 import mp3 from '../example_files/sample.mp3';
 import rtf from '../example_files/sample.rtf';
 import pdf from '../example_files/sample.pdf';
+import pdf2 from '../example_files/sample2.pdf';
 
 ReactDOM.render(
   <FileViewer
     fileType="pdf"
-    filePath={pdf}
+    filePath={pdf2}
     initialZoom={0}
     zoomInComp={<button>ZOOM IN</button>}
     zoomOutComp={<button>ZOOM OUT</button>}
     zoomResetComp={<button>ZOOM RESET</button>}
-    // customStyles={{
-    //   viewerContainer: {
-    //     width: '100%',
-    //     height: '100%'
-    //   },
-    //   viewer: {
-    //     width: '100%',
-    //     height: '100%',
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center'
-    //   },
-    //   page: {},
-    //   controlsContainer: {},
-    //   control: {}
-    // }}
+    preview={true}
   />,
   window.document.getElementById('app')
 );
